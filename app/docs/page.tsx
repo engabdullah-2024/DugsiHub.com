@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Copy, FileText, Search, Sparkles, Terminal, BookOpenText, LinkIcon, ShieldCheck, Users } from "lucide-react";
+import {  FileText, Search, Sparkles, BookOpenText, LinkIcon, ShieldCheck, Users } from "lucide-react";
 
 // ------------------------------------------------------------
 // SomDevz — Documentation (app/docs/page.tsx)

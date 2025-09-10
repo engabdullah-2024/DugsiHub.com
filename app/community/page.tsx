@@ -30,7 +30,7 @@ import {
   Trophy,
   CalendarDays,
   BookOpen,
-  FileText,
+ 
   Hash,
   Send,
   Search,

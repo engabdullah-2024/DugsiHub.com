@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  BookOpen,
+ 
   FileText,
   GraduationCap,
   Newspaper,
