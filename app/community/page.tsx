@@ -30,7 +30,6 @@ import {
   Trophy,
   CalendarDays,
   BookOpen,
- 
   Hash,
   Send,
   Search,
@@ -357,7 +356,7 @@ export default function CommunityPage() {
                       <BookOpen className="h-4 w-4" /> {e.mode}
                     </div>
                     <div className="pt-1">
-                      <Button asChild className="w-full"> 
+                      <Button asChild className="w-full">
                         <Link href={e.href}>Register</Link>
                       </Button>
                     </div>
@@ -384,7 +383,11 @@ export default function CommunityPage() {
                           <Trophy className="h-4 w-4" />
                         </span>
                         <span className="truncate text-sm font-medium">{c.name}</span>
-                        {i === 0 && <Badge className="gap-1 bg-emerald-600 hover:bg-emerald-600/90"><Star className="h-3.5 w-3.5" /> Top</Badge>}
+                        {i === 0 && (
+                          <Badge className="gap-1 bg-emerald-600 hover:bg-emerald-600/90">
+                            <Star className="h-3.5 w-3.5" /> Top
+                          </Badge>
+                        )}
                       </div>
                       <div className="mt-1 text-xs text-muted-foreground">
                         {c.role} • {c.subject}
@@ -430,7 +433,9 @@ export default function CommunityPage() {
         </p>
         <div className="mt-6 flex items-center justify-center gap-3">
           <Button asChild className="bg-emerald-600 hover:bg-emerald-600/90">
-            <Link href="https://t.me/dugsihub" target="_blank">Join Telegram</Link>
+            <Link href="https://t.me/dugsihub" target="_blank">
+              Join Telegram
+            </Link>
           </Button>
           <Button asChild variant="outline">
             <Link href="/signin">Sign in</Link>
@@ -443,26 +448,28 @@ export default function CommunityPage() {
 
 /* ---------------------------- Helpers ---------------------------- */
 
-function FilterRow({
+type FilterRowProps<T extends string> = {
+  label: string;
+  value: T;
+  onChange: (v: T) => void;
+  options: readonly T[];
+  compact?: boolean;
+};
+
+function FilterRow<T extends string>({
   label,
   value,
   onChange,
   options,
   compact = false,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: any) => void;
-  options: readonly string[];
-  compact?: boolean;
-}) {
+}: FilterRowProps<T>) {
   return (
     <div className={`flex items-center ${compact ? "gap-2" : "gap-3"}`}>
       <Label className="text-sm text-muted-foreground">{label}</Label>
       <div className="relative">
         <select
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => onChange(e.target.value as T)}
           className="h-9 rounded-md border bg-background px-3 text-sm"
         >
           {options.map((o) => (
