@@ -27,7 +27,7 @@ export default function Header() {
         <Link href="/" className="flex items-center gap-2" aria-label="Dugsi Hub — Home">
           <div className="relative h-44 w-44 sm:h-32 sm:w-52">
             <Image
-              src="/dugsihub.png" // replace with your final asset path
+              src="/dugsihub.png"
               alt="Dugsi Hub"
               fill
               priority
@@ -42,21 +42,6 @@ export default function Header() {
           <Link href="/" className="text-base font-medium text-muted-foreground hover:text-foreground">
             Home
           </Link>
-          <Link href="/papers" className="text-base font-medium text-muted-foreground hover:text-foreground">
-            Past Papers
-          </Link>
-          <Link href="/quizzes" className="text-base font-medium text-muted-foreground hover:text-foreground">
-            Quizzes
-          </Link>
-          <Link href="/subjects" className="text-base font-medium text-muted-foreground hover:text-foreground">
-            Subjects
-          </Link>
-          <Link href="/resources" className="text-base font-medium text-muted-foreground hover:text-foreground">
-            Resources
-          </Link>
-          <Link href="/community" className="text-base font-medium text-muted-foreground hover:text-foreground">
-            Community
-          </Link>
           <Link href="/about" className="text-base font-medium text-muted-foreground hover:text-foreground">
             About
           </Link>
@@ -68,12 +53,6 @@ export default function Header() {
         {/* Actions */}
         <div className="flex items-center gap-3">
           <ModeToggle />
-          <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex">
-            <Link href="/login">Sign In</Link>
-          </Button>
-          <Button asChild size="sm" className="hidden md:inline-flex bg-emerald-600 hover:bg-emerald-600/90">
-            <Link href="/get-started">Get Started</Link>
-          </Button>
 
           {/* Mobile Nav */}
           <Sheet>
@@ -101,36 +80,10 @@ export default function Header() {
               </SheetHeader>
               <Separator />
 
-              {/* Quick links */}
-              <div className="grid grid-cols-2 gap-2 p-3">
-                {[
-                  { href: "/papers", label: "Past Papers" },
-                  { href: "/quizzes", label: "Quizzes" },
-                  { href: "/subjects", label: "Subjects" },
-                  { href: "/resources", label: "Resources" },
-                ].map((l) => (
-                  <SheetClose asChild key={l.href}>
-                    <Link
-                      href={l.href}
-                      className="rounded-xl border bg-muted/40 px-4 py-3 text-sm font-medium hover:bg-muted"
-                    >
-                      {l.label}
-                    </Link>
-                  </SheetClose>
-                ))}
-              </div>
-
-              <Separator />
-
               {/* Stacked nav */}
               <nav className="flex flex-col gap-1 p-2">
                 {[
                   { href: "/", label: "Home" },
-                  { href: "/papers", label: "Past Papers" },
-                  { href: "/quizzes", label: "Quizzes" },
-                  { href: "/subjects", label: "Subjects" },
-                  { href: "/resources", label: "Resources" },
-                  { href: "/community", label: "Community" },
                   { href: "/about", label: "About" },
                   { href: "/contact", label: "Contact" },
                 ].map((item) => (
@@ -146,22 +99,6 @@ export default function Header() {
                   </SheetClose>
                 ))}
               </nav>
-
-              <Separator className="my-2" />
-
-              {/* Footer actions */}
-              <div className="flex items-center justify-between gap-2 p-3">
-                <SheetClose asChild>
-                  <Button asChild variant="outline" className="flex-1">
-                    <Link href="/login">Sign In</Link>
-                  </Button>
-                </SheetClose>
-                <SheetClose asChild>
-                  <Button asChild className="flex-1 bg-emerald-600 hover:bg-emerald-600/90">
-                    <Link href="/get-started">Get Started</Link>
-                  </Button>
-                </SheetClose>
-              </div>
             </SheetContent>
           </Sheet>
         </div>
