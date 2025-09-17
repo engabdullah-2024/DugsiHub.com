@@ -69,7 +69,7 @@ export default function Header() {
         <div className="flex items-center gap-3">
           <ModeToggle />
           <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex">
-            <Link href="/signin">Sign In</Link>
+            <Link href="/login">Sign In</Link>
           </Button>
           <Button asChild size="sm" className="hidden md:inline-flex bg-emerald-600 hover:bg-emerald-600/90">
             <Link href="/get-started">Get Started</Link>
@@ -153,7 +153,7 @@ export default function Header() {
               <div className="flex items-center justify-between gap-2 p-3">
                 <SheetClose asChild>
                   <Button asChild variant="outline" className="flex-1">
-                    <Link href="/signin">Sign In</Link>
+                    <Link href="/login">Sign In</Link>
                   </Button>
                 </SheetClose>
                 <SheetClose asChild>
