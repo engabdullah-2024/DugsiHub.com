@@ -1,7 +1,7 @@
 "use client";
 
 import HeroPage from "./hero/page";
-import PapersPage from "./papers/page";
+
 
 
 
@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <div>
 <HeroPage/>
-<PapersPage/>
+
     </div>
   );
 }
