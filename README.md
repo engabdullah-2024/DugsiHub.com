@@ -6,7 +6,7 @@
 
 <h1 align="center">Dugsi Hub</h1>
 <p align="center">
-  Past papers, quizzes, and student tools — built with Next.js App Router, TypeScript, Tailwind, and shadcn/ui.
+  Past papers, quizzes, and student tools — built with Next.js (App Router), TypeScript, Tailwind, and shadcn/ui.
 </p>
 
 <p align="center">
@@ -18,25 +18,41 @@
 
 ---
 
+## Table of Contents
+- [Features](#-features)
+- [Tech](#-tech)
+- [Getting Started](#-getting-started)
+- [Environment Variables](#-environment-variables)
+- [Contact API](#-contact-api)
+- [Project Structure](#-project-structure)
+- [Scripts](#-scripts)
+- [Deploy](#-deploy)
+- [Troubleshooting](#-troubleshooting)
+- [About Dugsi Hub](#-about-dugsi-hub)
+- [Contact](#-contact)
+- [License](#-license)
+
+---
+
 ## ✨ Features
 
 - **Modern stack:** Next.js (App Router) + TypeScript + Tailwind + shadcn/ui.
-- **Dark mode:** one-click theme switch with a11y-friendly defaults.
-- **Contact form (production-ready):**
-  - `/api/contact` with validation, honeypot, and helpful error messages.
-  - **Resend** email delivery using a **safe fallback sender** (`onboarding@resend.dev`).
-  - **Reply-To** set to the user so you can respond directly.
-  - Node runtime enforced (no Edge surprises).
-- **Email templates:** Clean HTML emails rendered via Resend `react:`; no `any`, no ts-ignore.
-- **ESLint/TypeScript strict:** No `any`, typed API responses, clean catches.
+- **Dark mode:** one-click theme toggle with accessible defaults.
+- **Production-ready contact form:**
+  - `/api/contact` with validation, honeypot, and friendly errors.
+  - **Resend** email delivery using a **safe fallback sender** (`onboarding@resend.dev`) until a domain is verified.
+  - `Reply-To` set to the user so you can respond directly.
+  - **Node runtime enforced** (no Edge surprises).
+- **Email UX:** designed HTML emails via Resend’s `react:` option; strict TypeScript (no `any`, no ts-comments).
+- **Strict quality:** ESLint + TypeScript, typed API responses, safe error handling.
 
 ---
 
 ## 📦 Tech
 
-- **Frontend:** Next.js 13+ (App Router), TypeScript, Tailwind, shadcn/ui, framer-motion, lucide-react
-- **Email:** Resend (`resend` SDK, `@react-email/render` used internally by SDK)
-- **Styling:** Tailwind + utility-first components
+- **Frontend:** Next.js 13+ (App Router), TypeScript, Tailwind, shadcn/ui, framer-motion, lucide-react  
+- **Email:** Resend (`resend` SDK; SDK internally uses `@react-email/render`)  
+- **Styling:** Tailwind (utility-first components)
 
 ---
 
