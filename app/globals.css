@@ -111,6 +111,34 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
+/* logo stroke (works in dark + light) */
+:root { --logo-stroke: transparent; }
+.dark { --logo-stroke: rgba(255, 255, 255, 0.9); }
+
+.logo-stroked {
+  filter:
+    drop-shadow(0 1px 0 var(--logo-stroke))
+    drop-shadow(0 -1px 0 var(--logo-stroke))
+    drop-shadow(1px 0 0 var(--logo-stroke))
+    drop-shadow(-1px 0 0 var(--logo-stroke));
+}
+
+.dark .logo-stroked {
+  filter:
+    drop-shadow(0 1px 0 var(--logo-stroke))
+    drop-shadow(0 -1px 0 var(--logo-stroke))
+    drop-shadow(1px 0 0 var(--logo-stroke))
+    drop-shadow(-1px 0 0 var(--logo-stroke))
+    brightness(1.06) contrast(1.05);
+}
+
+/* optional: the subtle grid bg you use on auth/dashboard */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
 
 @layer base {
   * {
