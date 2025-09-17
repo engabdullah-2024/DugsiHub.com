@@ -10,7 +10,26 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Mail, Phone, MapPin, ArrowRight, SendHorizonal, Sparkles } from "lucide-react";
+import { Mail, Phone, MapPin, ArrowRight, SendHorizontal, Sparkles } from "lucide-react";
+
+// Strictly type the API response to avoid implicit any
+type ContactApiResponse = {
+  ok?: boolean;
+  error?: string;
+};
+
+function getErrorMessage(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  if (typeof err === "object" && err && "message" in err) {
+    const m = (err as { message?: unknown }).message;
+    if (typeof m === "string") return m;
+  }
+  try {
+    return JSON.stringify(err);
+  } catch {
+    return String(err);
+  }
+}
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -24,19 +43,17 @@ export default function ContactPage() {
 
     try {
       const form = new FormData(e.currentTarget);
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        body: form, // supports FormData directly
-      });
+      const res = await fetch("/api/contact", { method: "POST", body: form });
 
-      const json = await res.json();
+      const json: ContactApiResponse = await res.json(); // <- typed, no any
       if (!res.ok || !json.ok) {
         throw new Error(json.error || "Failed to send.");
       }
+
       setSubmitted(true);
       (e.target as HTMLFormElement).reset();
-    } catch (error: any) {
-      setErr(error.message || "Something went wrong");
+    } catch (error: unknown) {
+      setErr(getErrorMessage(error) || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -45,21 +62,13 @@ export default function ContactPage() {
   return (
     <main className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-16">
       {/* Header */}
-      <motion.section
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
+      <motion.section initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
         <div className="mx-auto max-w-2xl text-center">
           <Badge variant="secondary" className="mb-4 inline-flex items-center gap-1">
             <Sparkles className="h-4 w-4" /> Contact
           </Badge>
-          <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl">
-            Send Us a Message
-          </h1>
-          <p className="mt-3 text-lg text-muted-foreground">
-            Fill out the form below and we’ll get back to you as soon as possible.
-          </p>
+          <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl">Send Us a Message</h1>
+          <p className="mt-3 text-lg text-muted-foreground">Fill out the form below and we’ll get back to you as soon as possible.</p>
         </div>
       </motion.section>
 
@@ -69,9 +78,7 @@ export default function ContactPage() {
         <Card className="border-muted/40 lg:col-span-3">
           <CardHeader>
             <CardTitle>Send Us a Message</CardTitle>
-            <p className="text-sm text-muted-foreground">
-              Fill out the form below and we’ll get back to you as soon as possible.
-            </p>
+            <p className="text-sm text-muted-foreground">Fill out the form below and we’ll get back to you as soon as possible.</p>
           </CardHeader>
 
           <CardContent>
@@ -79,8 +86,7 @@ export default function ContactPage() {
               <Alert className="border-emerald-200/60 bg-emerald-50/50 dark:bg-emerald-950/30">
                 <AlertTitle className="font-semibold">Thanks! Your message was sent.</AlertTitle>
                 <AlertDescription className="text-sm">
-                  We’ll reply within 24–48 hours. Meanwhile, you can{" "}
-                  <Link href="/papers" className="underline">browse past papers</Link> or{" "}
+                  We’ll reply within 24–48 hours. Meanwhile, you can <Link href="/papers" className="underline">browse past papers</Link> or{" "}
                   <Link href="/quizzes" className="underline">try a quiz</Link>.
                 </AlertDescription>
               </Alert>
@@ -123,12 +129,8 @@ export default function ContactPage() {
                 )}
 
                 <div className="pt-2">
-                  <Button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full gap-2 bg-emerald-600 hover:bg-emerald-600/90"
-                  >
-                    {loading ? "Sending..." : "Send Message"} <SendHorizonal className="h-4 w-4" />
+                  <Button type="submit" disabled={loading} className="w-full gap-2 bg-emerald-600 hover:bg-emerald-600/90">
+                    {loading ? "Sending..." : "Send Message"} <SendHorizontal className="h-4 w-4" />
                   </Button>
                 </div>
               </form>
