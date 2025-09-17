@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Dugsu Hub — Somalia’s Leading Grade 12 Exam Platform",
   description:
-    "SomDevz is the GitHub collaboration hub for Somali developers. Build open‑source projects, learn in public, and grow together.",
+    "Dugsi Hub centralizes Past Papers, Auto-graded Quizzes, and Study Resources—in Af-Soomaali when possible— so learners can revise smarter, together.",
 };
 
 export default function RootLayout({
