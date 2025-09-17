@@ -16,7 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import { ModeToggle } from "../Components/ModeToggle";
 
 // ------------------------------------------------------------
-// Dugsi Hub — Header (big logo aligned with nav links)
+// Dugsi Hub — Header (logo with dark-mode stroke for visibility)
 // ------------------------------------------------------------
 
 export default function Header() {
@@ -32,7 +32,7 @@ export default function Header() {
               fill
               priority
               sizes="(max-width: 640px) 176px, 208px"
-              className="object-contain"
+              className="object-contain logo-stroked"
             />
           </div>
         </Link>
@@ -71,7 +71,7 @@ export default function Header() {
                       alt="Dugsi Hub"
                       fill
                       sizes="176px"
-                      className="object-contain"
+                      className="object-contain logo-stroked"
                       priority
                     />
                   </div>
@@ -103,6 +103,35 @@ export default function Header() {
           </Sheet>
         </div>
       </div>
+
+      {/* Dark-mode logo stroke + pop, scoped + safe */}
+      <style jsx global>{`
+        :root {
+          --logo-stroke: transparent;
+        }
+        .dark {
+          --logo-stroke: rgba(255, 255, 255, 0.9);
+        }
+        /* Adds a subtle “stroke” around transparent PNG edges using directional drop-shadows.
+           Enabled in dark mode via --logo-stroke; no effect in light mode. */
+        .logo-stroked {
+          filter:
+            drop-shadow(0 1px 0 var(--logo-stroke))
+            drop-shadow(0 -1px 0 var(--logo-stroke))
+            drop-shadow(1px 0 0 var(--logo-stroke))
+            drop-shadow(-1px 0 0 var(--logo-stroke));
+        }
+        .dark .logo-stroked {
+          /* small pop so dark logos aren’t muddy on dark surfaces */
+          filter:
+            drop-shadow(0 1px 0 var(--logo-stroke))
+            drop-shadow(0 -1px 0 var(--logo-stroke))
+            drop-shadow(1px 0 0 var(--logo-stroke))
+            drop-shadow(-1px 0 0 var(--logo-stroke))
+            brightness(1.06)
+            contrast(1.05);
+        }
+      `}</style>
     </header>
   );
 }
