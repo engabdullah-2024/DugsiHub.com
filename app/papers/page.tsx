@@ -18,13 +18,19 @@ type SearchParams = {
   page?: string;
 };
 
+// ---- helpers & types --------------------------------------------------------
+
 function escReg(s: string) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function fmtDate(d: Date | string) {
   const dt = new Date(d);
-  return dt.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+  return dt.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 function buildHref(base: string, params: Record<string, string | undefined>) {
@@ -36,12 +42,32 @@ function buildHref(base: string, params: Record<string, string | undefined>) {
   return qs ? `${base}?${qs}` : base;
 }
 
-export default async function PapersPage({ searchParams }: { searchParams?: SearchParams }) {
+// For lean() results: _id could be string or have toString()
+type IdLike = string | { toString(): string };
+
+interface PaperLean {
+  _id: IdLike;
+  subject: string;
+  pages: number;
+  fileUrl: string;
+  fileName: string;
+  createdAt: Date | string;
+}
+
+// ----------------------------------------------------------------------------
+
+export default async function PapersPage({
+  searchParams,
+}: {
+  searchParams?: SearchParams;
+}) {
   await dbConnect();
 
   const originalQ = (searchParams?.q || "").trim();
   const originalSubject = (searchParams?.subject || "all").trim();
-  const sort = (searchParams?.sort || "new") as NonNullable<SearchParams["sort"]>;
+  const sort = (searchParams?.sort || "new") as NonNullable<
+    SearchParams["sort"]
+  >;
   const page = Math.max(1, parseInt(searchParams?.page || "1", 10) || 1);
   const perPage = 12;
 
@@ -49,13 +75,14 @@ export default async function PapersPage({ searchParams }: { searchParams?: Sear
   const allSubjects = (await Paper.distinct("subject")) as string[];
   allSubjects.sort((a, b) => a.localeCompare(b));
 
-  // Smart subject detection:
-  // If user typed a search that EXACTLY equals a subject (case-insensitive)
-  // and didn't pick a subject, auto-apply that subject and clear the query.
+  // Smart subject detection: if the search exactly matches a subject
   const exactMatch = allSubjects.find(
-    (s) => s.trim().toLowerCase() === originalQ.toLowerCase() && originalQ.length > 0
+    (s) =>
+      s.trim().toLowerCase() === originalQ.toLowerCase() &&
+      originalQ.length > 0
   );
-  const subjectFilter = originalSubject === "all" && exactMatch ? exactMatch : originalSubject;
+  const subjectFilter =
+    originalSubject === "all" && exactMatch ? exactMatch : originalSubject;
   const q = exactMatch ? "" : originalQ;
 
   // Mongo filter
@@ -79,7 +106,11 @@ export default async function PapersPage({ searchParams }: { searchParams?: Sear
 
   const [total, rows] = await Promise.all([
     Paper.countDocuments(filter),
-    Paper.find(filter).sort(sortObj).skip((page - 1) * perPage).limit(perPage).lean(),
+    Paper.find(filter)
+      .sort(sortObj)
+      .skip((page - 1) * perPage)
+      .limit(perPage)
+      .lean<PaperLean>(),
   ]);
 
   const totalPages = Math.max(1, Math.ceil(total / perPage));
@@ -92,7 +123,10 @@ export default async function PapersPage({ searchParams }: { searchParams?: Sear
           <h1 className="text-xl font-semibold tracking-tight">Past Papers</h1>
 
           {/* GET form (no client JS) */}
-          <form className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row" role="search">
+          <form
+            className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row"
+            role="search"
+          >
             <div className="relative">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
@@ -133,7 +167,10 @@ export default async function PapersPage({ searchParams }: { searchParams?: Sear
 
             {/* Reset page when applying new filters */}
             <input type="hidden" name="page" value="1" />
-            <Button type="submit" className="h-9 bg-emerald-600 hover:bg-emerald-600/90">
+            <Button
+              type="submit"
+              className="h-9 bg-emerald-600 hover:bg-emerald-600/90"
+            >
               Apply
             </Button>
           </form>
@@ -147,12 +184,16 @@ export default async function PapersPage({ searchParams }: { searchParams?: Sear
             {exactMatch ? (
               <>
                 <Badge variant="secondary">subject: {exactMatch}</Badge>
-                <span className="text-xs text-muted-foreground">(detected from search)</span>
+                <span className="text-xs text-muted-foreground">
+                  (detected from search)
+                </span>
               </>
             ) : (
               <>
                 {originalQ && <Badge variant="secondary">q: {originalQ}</Badge>}
-                {subjectFilter !== "all" && <Badge variant="secondary">subject: {subjectFilter}</Badge>}
+                {subjectFilter !== "all" && (
+                  <Badge variant="secondary">subject: {subjectFilter}</Badge>
+                )}
               </>
             )}
 
@@ -169,7 +210,8 @@ export default async function PapersPage({ searchParams }: { searchParams?: Sear
         {/* Results meta */}
         <div className="mb-4 text-xs text-muted-foreground">
           Showing <span className="font-medium">{rows.length}</span> of{" "}
-          <span className="font-medium">{total}</span> result{total === 1 ? "" : "s"}
+          <span className="font-medium">{total}</span> result
+          {total === 1 ? "" : "s"}
         </div>
 
         {/* Grid */}
@@ -184,14 +226,16 @@ export default async function PapersPage({ searchParams }: { searchParams?: Sear
           </Card>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {rows.map((p: any) => (
+            {rows.map((p) => (
               <Card
-                key={String(p._id)}
+                key={`${p._id}`}
                 className="group border-muted/40 transition-colors hover:border-emerald-200 dark:hover:border-emerald-900"
               >
                 <CardHeader className="space-y-1 pb-2">
                   <div className="flex items-start justify-between">
-                    <CardTitle className="line-clamp-1 text-base">{p.subject}</CardTitle>
+                    <CardTitle className="line-clamp-1 text-base">
+                      {p.subject}
+                    </CardTitle>
                     <Badge variant="outline" className="text-[10px]">
                       {p.pages} pages
                     </Badge>
@@ -200,7 +244,9 @@ export default async function PapersPage({ searchParams }: { searchParams?: Sear
                     <BookOpen className="h-3.5 w-3.5" />
                     <span className="truncate">{p.fileName}</span>
                   </div>
-                  <p className="text-[11px] text-muted-foreground">Added {fmtDate(p.createdAt)}</p>
+                  <p className="text-[11px] text-muted-foreground">
+                    Added {fmtDate(p.createdAt)}
+                  </p>
                 </CardHeader>
 
                 <CardContent>
@@ -247,7 +293,8 @@ export default async function PapersPage({ searchParams }: { searchParams?: Sear
               }`}
               href={buildHref("/papers", {
                 q: originalQ || undefined,
-                subject: originalSubject !== "all" ? originalSubject : undefined,
+                subject:
+                  originalSubject !== "all" ? originalSubject : undefined,
                 sort,
                 page: String(Math.max(1, page - 1)),
               })}
@@ -267,7 +314,8 @@ export default async function PapersPage({ searchParams }: { searchParams?: Sear
               }`}
               href={buildHref("/papers", {
                 q: originalQ || undefined,
-                subject: originalSubject !== "all" ? originalSubject : undefined,
+                subject:
+                  originalSubject !== "all" ? originalSubject : undefined,
                 sort,
                 page: String(Math.min(totalPages, page + 1)),
               })}

@@ -1,30 +1,37 @@
 // lib/db.ts
 import mongoose, { Mongoose } from "mongoose";
 
-declare global {
-  // eslint-disable-next-line no-var
-  var __mongoose_conn: Promise<Mongoose> | undefined;
+const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_DB = process.env.MONGODB_DB || "dh";
+
+if (!MONGODB_URI) {
+  throw new Error("Missing MONGODB_URI (.env.local)");
 }
 
-export async function dbConnect(): Promise<Mongoose> {
-  const uri = process.env.MONGODB_URI;
-  const dbName = process.env.MONGODB_DB || "dh";
-  if (!uri) throw new Error("Missing MONGODB_URI (.env.local)");
+// Cache the connection promise on globalThis so dev HMR doesn’t open many sockets.
+const globalForMongoose = globalThis as unknown as {
+  __mongooseConn?: Promise<Mongoose>;
+};
 
-  if (!global.__mongoose_conn) {
-    global.__mongoose_conn = mongoose
-      .connect(uri, {
-        dbName,
-        serverSelectionTimeoutMS: 8000, // default ~30s; 8s feels snappier in dev
+export async function dbConnect(): Promise<Mongoose> {
+  if (!globalForMongoose.__mongooseConn) {
+    globalForMongoose.__mongooseConn = mongoose
+      .connect(MONGODB_URI, {
+        dbName: MONGODB_DB,
+        serverSelectionTimeoutMS: 8000, // snappier fail in dev
       })
-      .catch((err) => {
-        if (err?.name === "MongooseServerSelectionError") {
+      .catch((err: unknown) => {
+        if (
+          typeof err === "object" &&
+          err &&
+          (err as { name?: string }).name === "MongooseServerSelectionError"
+        ) {
           console.error(
-            "[DB] Atlas not reachable. Did you allowlist your IP in Network Access or use 0.0.0.0/0 for dev?"
+            "[DB] Atlas not reachable. Make sure your IP is allowlisted (or use 0.0.0.0/0 for dev)."
           );
         }
         throw err;
       });
   }
-  return global.__mongoose_conn;
+  return globalForMongoose.__mongooseConn;
 }
