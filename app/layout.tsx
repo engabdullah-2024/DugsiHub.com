@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dugsu Hub — Somalia’s Leading Grade 12 Exam Platform",
+  title: "Dugsi Hub — Somalia’s Leading Grade 12 Exam Platform",
   description:
     "Dugsi Hub centralizes Past Papers, Auto-graded Quizzes, and Study Resources—in Af-Soomaali when possible— so learners can revise smarter, together.",
 };
@@ -26,6 +26,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const initialName: string | null = null; // or fetch/set actual value
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
@@ -36,7 +38,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
+          <Header initialName={initialName} />
           {children}
           <Footer />
         </ThemeProvider>
