@@ -1,6 +1,6 @@
 // app/dashboard/page.tsx
-import Image from "next/image";
 import { redirect } from "next/navigation";
+import Image from "next/image";
 import { currentUser } from "@/lib/auth";
 import { dbConnect } from "@/lib/db";
 import { Paper } from "../models/Paper";
@@ -20,8 +20,7 @@ import {
   Search,
   Sparkles,
 } from "lucide-react";
-import SignOutButton from "./signout-button";
-import PapersUpload from "./papers-upload"; // client component (upload form)
+import PapersUpload from "./papers-upload";
 
 type ActivityItem = {
   id: string;
@@ -36,7 +35,6 @@ export default async function DashboardPage() {
   const isSuper = user.role === "superadmin";
   const firstName = user.firstName ?? "Admin";
 
-  // Fetch dashboard data on the server (fast & safe)
   await dbConnect();
   const paperCount = await Paper.countDocuments().lean();
   const recentPapers = await Paper.find().sort({ createdAt: -1 }).limit(8).lean();
@@ -66,84 +64,47 @@ export default async function DashboardPage() {
         }));
 
   return (
-    <main className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-30 border-b bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-          <div className="flex items-center gap-3">
-            <div className="relative h-8 w-[140px]">
-              <Image
-                src="/dugsihub.png"
-                alt="Dugsi Hub"
-                fill
-                className="object-contain logo-stroked"
-                sizes="140px"
-                priority
-              />
+    <section className="border-b bg-grid">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+        {/* Hero / welcome */}
+        <div className="rounded-2xl border bg-gradient-to-br from-emerald-50 via-background to-background p-5 dark:from-emerald-950/20">
+          <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+            <div>
+              <Badge variant="secondary" className="mb-2">
+                Welcome
+              </Badge>
+              <h1 className="text-2xl font-semibold tracking-tight">
+                Welcome back, {firstName} 👋
+              </h1>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Instructor: <span className="font-medium">Eng Abdullah</span>
+              </p>
             </div>
-            {/* Desktop search (placeholder) */}
-            <div className="hidden md:block">
-              <div className="relative">
-                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input placeholder="Search…" className="h-9 w-64 pl-9" aria-label="Search" />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <span className="hidden text-sm text-muted-foreground sm:block">
-              {user.firstName} {user.lastName} • {user.role}
-            </span>
-            <SignOutButton />
-          </div>
-        </div>
-      </header>
-
-      {/* Hero */}
-      <section className="border-b bg-grid">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-          <div className="rounded-2xl border bg-gradient-to-br from-emerald-50 via-background to-background p-5 dark:from-emerald-950/20">
-            <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-              <div>
-                <Badge variant="secondary" className="mb-2">
-                  Welcome
-                </Badge>
-                <h1 className="text-2xl font-semibold tracking-tight">
-                  Welcome back, {firstName} 👋
-                </h1>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Instructor: <span className="font-medium">Eng Abdullah</span>
-                </p>
-              </div>
-
-              {isSuper && (
-                <div className="flex gap-2">
-                  <Button className="gap-2 bg-emerald-600 hover:bg-emerald-600/90">
-                    <Plus className="h-4 w-4" />
-                    Create Quiz
+            {isSuper && (
+              <div className="flex gap-2">
+                <Button className="gap-2 bg-emerald-600 hover:bg-emerald-600/90">
+                  <Plus className="h-4 w-4" />
+                  Create Quiz
+                </Button>
+                <a href="#upload" className="inline-flex">
+                  <Button variant="outline" className="gap-2">
+                    <Upload className="h-4 w-4" />
+                    Upload Past Papers
                   </Button>
-                  <a href="#upload" className="inline-flex">
-                    <Button variant="outline" className="gap-2">
-                      <Upload className="h-4 w-4" />
-                      Upload Past Papers
-                    </Button>
-                  </a>
-                </div>
-              )}
-            </div>
+                </a>
+              </div>
+            )}
           </div>
         </div>
-      </section>
 
-      {/* Content */}
-      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
         {/* Stats */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((s) => (
             <StatCard key={s.title} title={s.title} value={s.value} icon={s.icon} />
           ))}
         </div>
 
+        {/* Main content */}
         <div className="mt-8 grid gap-6 lg:grid-cols-3">
           {/* Recent Activity */}
           <Card className="border-muted/40 lg:col-span-2">
@@ -254,8 +215,8 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
   );
 }
 

@@ -50,12 +50,11 @@ export default function HeroPage() {
             </Badge>
 
             <h1 className="text-balance bg-gradient-to-b from-foreground to-foreground/60 bg-clip-text text-4xl font-bold leading-tight text-transparent sm:text-5xl md:text-6xl">
-              Launch Your Grade 12 Success — in Somali
+            Master <span className="text-[#4a8c64]">Grade 12</span> and Shape your <span className="text-[#4a8c64]"> Future in </span>a Year
             </h1>
 
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Study smarter for the Somali National Exams. Access past papers (PDF),
-              auto-graded quizzes, marking schemes, and curated resources — all in Somali.
+            Master the Somali National Exams with Smart Study. Explore past papers (PDFs), instant auto-graded quizzes, marking schemes, and expertly curated resources — all in Somali.
             </p>
 
             {/* bullets */}
@@ -92,7 +91,7 @@ export default function HeroPage() {
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <Link href="/subjects">View Subjects</Link>
+                <Link href="/papers">View Papers</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="sm:ml-2">
                 <Link href="/waitlist">Join Waitlist</Link>
