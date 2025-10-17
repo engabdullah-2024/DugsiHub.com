@@ -1,6 +1,7 @@
 
 
 import HeroPage from "./hero/page";
+import MentorPage from "./mentor/page";
 
 
 
@@ -15,7 +16,7 @@ export default function Home() {
   return (
     <div>
 <HeroPage/>
-
+<MentorPage/>
 
     </div>
   );
