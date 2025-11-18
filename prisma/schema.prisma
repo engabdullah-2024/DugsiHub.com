@@ -1,0 +1,40 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+model Admin {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId   String   @unique
+  email     String   @unique
+  fullName  String?
+  createdAt DateTime @default(now())
+
+  documents Document[]
+
+  // keep only non-duplicate indexes
+  @@index([createdAt], map: "idx_admin_createdAt")
+}
+
+model Document {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  name        String
+  totalPages  Int      @default(0)
+  fileUrl     String?
+  fileData    Bytes?
+  contentType String?
+  fileSize    Int?
+  createdAt   DateTime @default(now())
+
+  adminId String @db.ObjectId
+  admin   Admin  @relation(fields: [adminId], references: [id])
+
+  @@index([adminId], map: "idx_document_adminId")
+  @@index([createdAt], map: "idx_document_createdAt")
+}

@@ -39,10 +39,10 @@ export default function AboutPage() {
         className="mx-auto max-w-3xl text-center"
       >
         <Badge variant="secondary" className="mb-4 inline-flex items-center gap-1">
-          <Sparkles className="h-4 w-4" /> About Dugsi Hub
+          <Sparkles className="h-4 w-4 text-[#00cc8f]" /> About Dugsi Hub
         </Badge>
         <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl">
-          Helping Grade 12 students ace the Somali National Exams
+          Helping Grade 12 students ace <span className="text-[#00cc8f]">the Somali National Exams</span>
         </h1>
         <p className="mt-3 text-lg text-muted-foreground">
           Dugsi Hub centralizes <span className="font-medium text-foreground">Past Papers</span>,{" "}
@@ -63,14 +63,14 @@ export default function AboutPage() {
       {/* Stats strip */}
       <section className="mx-auto mt-12 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4">
         {[
-          { label: "Learners", value: "5,000+", Icon: Users2 },
+          { label: "Learners", value: "5,000+", Icon: Users2, color: "#00cc8f" },
           { label: "Past Papers", value: "400+", Icon: FileText },
           { label: "Quizzes", value: "250+", Icon: BookOpen },
           { label: "Subjects", value: "8", Icon: School },
         ].map(({ label, value, Icon }) => (
           <div key={label} className="rounded-xl border bg-card/50 p-4 text-center">
             <div className="flex items-center justify-center gap-2 text-foreground">
-              <Icon className="h-4 w-4" />
+              <Icon className="h-4 w-4 text-[#00cc8f]" />
               <span className="text-sm">{label}</span>
             </div>
             <div className="mt-1 text-2xl font-semibold">{value}</div>
@@ -83,7 +83,7 @@ export default function AboutPage() {
         <Card className="lg:col-span-5 border-muted/40">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
-              <Target className="h-4 w-4" />
+              <Target className="h-4 w-4 text-[#00cc8f]" />
               Our Mission
             </CardTitle>
           </CardHeader>
@@ -132,7 +132,7 @@ export default function AboutPage() {
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2 text-base">
                   <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border bg-muted/40">
-                    <Icon className="h-4 w-4" />
+                    <Icon className="h-4 w-4 text-[#00cc8f]" />
                   </span>
                   {title}
                 </CardTitle>
@@ -196,7 +196,7 @@ export default function AboutPage() {
           <Card key={title} className="border-muted/40">
             <CardContent className="flex items-start gap-3 p-4">
               <span className="mt-0.5 inline-flex h-9 w-9 items-center justify-center rounded-md border bg-muted/40">
-                <Icon className="h-5 w-5" />
+                <Icon className="h-5 w-5 text-[#00cc8f]" />
               </span>
               <div>
                 <div className="text-sm font-medium">{title}</div>
@@ -295,7 +295,7 @@ export default function AboutPage() {
             </div>
             <Button asChild variant="outline">
               <Link href="/events">
-                <CalendarDays className="mr-2 h-4 w-4" /> See Events
+                <CalendarDays className="mr-2 h-4 w-4 text-[#00cc8f]" /> See Events
               </Link>
             </Button>
           </CardContent>
